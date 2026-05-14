@@ -1,5 +1,9 @@
 # ParkEase - Smart Parking System
 
+# Live Demo
+
+Coming Soon
+
 A full-stack smart parking management system built using React, Node.js, Express.js, and MySQL.
 
 ParkEase helps users search, book, and manage parking slots efficiently through an interactive web application. The system improves parking management by providing parking availability, booking functionality, authentication, and payment integration.
@@ -78,6 +82,12 @@ git clone https://github.com/Anusha268A/ParkEase-Smart-Parking-System.git
 
 ---
 
+# Project Structure
+
+frontend/ → React frontend  
+backend/ → Express backend  
+assets/ → Screenshots and architecture images
+
 ## Install Frontend Dependencies
 
 ```bash
@@ -123,4 +133,4 @@ npm start
 
 # Author
 
-Anusha
+Anusha Ajmeera
