@@ -1,9 +1,8 @@
-# TEST CHANGE
 # ParkEase - Smart Parking System
 
-ParkEase is a full-stack smart parking management system that allows users to search, book, and manage parking slots efficiently.
+A full-stack smart parking management system built using React, Node.js, Express.js, and MySQL.
 
-The system helps users check parking availability, reserve slots, and manage bookings through an interactive web application.
+ParkEase helps users search, book, and manage parking slots efficiently through an interactive web application. The system improves parking management by providing parking availability, booking functionality, authentication, and payment integration.
 
 ---
 
@@ -16,7 +15,7 @@ The system helps users check parking availability, reserve slots, and manage boo
 - Google Maps Integration
 - Stripe / UPI Payment Module
 - Booking Management
-- Responsive UI
+- Responsive User Interface
 - Admin Dashboard
 
 ---
@@ -73,25 +72,43 @@ The system helps users check parking availability, reserve slots, and manage boo
 
 ## Clone Repository
 
+```bash
 git clone https://github.com/Anusha268A/ParkEase-Smart-Parking-System.git
+```
+
+---
 
 ## Install Frontend Dependencies
 
+```bash
 cd frontend
 npm install
+```
+
+---
 
 ## Start Frontend
 
+```bash
 npm start
+```
+
+---
 
 ## Install Backend Dependencies
 
+```bash
 cd backend
 npm install
+```
+
+---
 
 ## Start Backend
 
+```bash
 npm start
+```
 
 ---
 
