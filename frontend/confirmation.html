@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking Confirmed | ParkEase</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:"Segoe UI", sans-serif;
+    background:#f4f7fb;
+}
+
+/* HEADER */
+.app-header{
+    position:fixed;
+    top:0;
+    width:100%;
+    height:70px;
+    background:#004aad;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logo{
+    color:white;
+    font-size:22px;
+    font-weight:700;
+}
+
+.header-left{
+    position:absolute;
+    left:20px;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+/* CENTER */
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    padding-top:80px;
+}
+
+/* TICKET */
+.ticket{
+    background:white;
+    width:360px;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+.success{
+    color:#2ecc71;
+}
+
+.subtitle{
+    color:#666;
+    font-size:14px;
+}
+
+/* DETAILS */
+.details{
+    text-align:left;
+    margin:20px 0;
+}
+
+.details p{
+    margin:8px 0;
+}
+
+/* BARCODE */
+.barcode{
+    height:60px;
+    margin:20px 0;
+    background:repeating-linear-gradient(
+        90deg,
+        #000,
+        #000 2px,
+        transparent 2px,
+        transparent 4px
+    );
+}
+
+/* BUTTON */
+/* .btn{
+    margin-top:10px;
+    padding:10px 20px;
+    background:#004aad;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+} */
+
+/* 
+.btn:hover{
+    background:#003080;
+} */
+ .btn-group{
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn{
+    flex: 1;
+    padding: 10px;
+    background: #004aad;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover{
+    background:#003080;
+}
+</style>
+
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="header-left" onclick="goHome()">
+        <i class="fa-solid fa-house"></i>
+    </div>
+    <div class="logo">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </div>
+</header>
+
+<div class="container">
+
+<div class="ticket">
+
+<h2 class="success">
+    <i class="fa-solid fa-circle-check"></i> Booking Successful
+</h2>
+
+<p class="subtitle">Digital Parking Ticket</p>
+
+<div class="details">
+    <p><strong>Booking ID:</strong> <span id="booking"></span></p>
+    <p><strong>Name:</strong> <span id="user"></span></p>
+    <p><strong>Slot:</strong> <span id="slot"></span></p>
+    <p><strong>Lot:</strong> <span id="lot"></span></p>
+    <p><strong>Date:</strong> <span id="date"></span></p>
+    <p><strong>Time:</strong> <span id="time"></span></p>
+    <p><strong>Vehicle:</strong> <span id="vehicle"></span></p>
+    <p><strong>Time Left:</strong> <span id="timer"></span></p>
+</div>
+
+<!-- <div class="barcode"></div> -->
+<canvas id="qrcode"></canvas>
+
+<p style="font-size:13px;color:#777;">
+    Show this ticket at entry
+</p>
+
+
+<div class="btn-group">
+    <button class="btn" onclick="goSlots()">Book Another Slot</button>
+    <button class="btn" onclick="downloadTicket()">
+        <i class="fa-solid fa-download"></i> Download
+    </button>
+</div>
+</div>
+</div>
+
+<script>
+
+/* ✅ GET DATA */
+const user = JSON.parse(localStorage.getItem("user"));
+const ticket = JSON.parse(localStorage.getItem("ticket"));
+
+if (!user || !ticket) {
+    alert("Session expired ❌");
+    window.location.href = "dashboard.html";
+}
+
+/* ✅ SET VALUES */
+document.getElementById("booking").innerText = "PK-" + ticket.id;
+document.getElementById("user").innerText = user.name;
+document.getElementById("slot").innerText = ticket.slot_number;
+document.getElementById("lot").innerText = ticket.lot_name;
+document.getElementById("date").innerText = new Date(ticket.date).toDateString();
+document.getElementById("time").innerText = ticket.time;
+document.getElementById("vehicle").innerText = ticket.vehicle_type;
+/* ✅ QR CODE */
+const qrData = `
+Booking ID: PK-${ticket.id}
+User: ${user.name}
+Lot: ${ticket.lot_name}
+Slot: ${ticket.slot_number}
+`;
+
+QRCode.toCanvas(document.getElementById('qrcode'), qrData);
+/* ================= TIMER + REMINDER ================= */
+
+if(ticket.end_time){
+
+    const end = new Date(ticket.end_time);
+
+    function updateTimer(){
+
+        const now = new Date();
+        const diff = end - now;
+
+        if(diff <= 0){
+            document.getElementById("timer").innerText = "Expired ❌";
+            return;
+        }
+
+        let mins = Math.floor(diff / 60000);
+        let secs = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById("timer").innerText = `${mins}m ${secs}s`;
+
+    }
+
+    // 🔥 Update every second
+    setInterval(updateTimer, 1000);
+
+    // 🔥 Reminder (10 min before)
+    const reminderTime = end - new Date() - (10 * 60 * 1000);
+
+    if(reminderTime > 0){
+        setTimeout(() => {
+            alert("⏰ Your parking time will expire in 10 minutes!");
+        }, reminderTime);
+    }
+
+    // 🔥 Expiry alert
+    const expireTime = end - new Date();
+
+    if(expireTime > 0){
+        setTimeout(() => {
+            alert("❌ Your parking time has expired!");
+        }, expireTime);
+    }
+
+}
+
+/* NAVIGATION */
+function goHome(){
+    window.location.href = "dashboard.html";
+}
+function goSlots(){
+    window.location.href = "explore.html";
+}
+
+function downloadTicket(){
+    window.print();
+}
+
+</script>
+
+</body>
+</html>

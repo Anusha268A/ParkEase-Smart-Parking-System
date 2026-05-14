@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Slot | ParkEase</title>
+
+    <link rel="stylesheet" href="css/slots.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="header-left" onclick="goHome()">
+        <i class="fa-solid fa-house"></i>
+    </div>
+
+    <div class="logo">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </div>
+</header>
+
+<h2 class="title">
+    <i class="fa-solid fa-car-side"></i> Select Your Parking Slot
+</h2>
+
+<p class="subtitle">Choose an available slot</p>
+<p class="subtitle">
+    Parking Location: <strong id="lotName"></strong>
+</p>
+
+
+<!-- 🔥 ADD HERE -->
+<div style="text-align:center; margin-bottom:20px;">
+    <h3>Select Vehicle Type</h3>
+
+    <label>
+        <input type="radio" name="vehicle" value="2-wheeler" checked>
+        🏍️ 2 Wheeler
+    </label>
+
+    <label style="margin-left:20px;">
+        <input type="radio" name="vehicle" value="4-wheeler">
+        🚗 4 Wheeler
+    </label>
+</div>
+<div style="text-align:center; margin-bottom:20px;">
+
+    <h3>Select Parking Time</h3>
+
+    <label>Start Time:</label>
+    <input type="datetime-local" id="startTime">
+
+    <label style="margin-left:15px;">End Time:</label>
+    <input type="datetime-local" id="endTime">
+
+</div>
+
+<div class="parking-area">
+    <!-- SAME GRID (NO CHANGE) -->
+    <div class="slot available" onclick="selectSlot(this)">A1</div>
+    <div class="slot occupied">A2</div>
+    <div class="slot available" onclick="selectSlot(this)">A3</div>
+    <div class="slot blocked">A4</div>
+    <div class="slot available" onclick="selectSlot(this)">A5</div>
+
+    <div class="slot available" onclick="selectSlot(this)">B1</div>
+    <div class="slot occupied">B2</div>
+    <div class="slot available" onclick="selectSlot(this)">B3</div>
+    <div class="slot available" onclick="selectSlot(this)">B4</div>
+    <div class="slot blocked">B5</div>
+
+    <div class="slot occupied">C1</div>
+    <div class="slot available" onclick="selectSlot(this)">C2</div>
+    <div class="slot available" onclick="selectSlot(this)">C3</div>
+    <div class="slot blocked">C4</div>
+    <div class="slot available" onclick="selectSlot(this)">C5</div>
+
+    <div class="slot occupied">D1</div>
+    <div class="slot available" onclick="selectSlot(this)">D2</div>
+    <div class="slot available" onclick="selectSlot(this)">D3</div>
+    <div class="slot blocked">D4</div>
+    <div class="slot available" onclick="selectSlot(this)">D5</div>
+
+    <div class="slot occupied">E1</div>
+    <div class="slot available" onclick="selectSlot(this)">E2</div>
+    <div class="slot available" onclick="selectSlot(this)">E3</div>
+    <div class="slot blocked">E4</div>
+    <div class="slot available" onclick="selectSlot(this)">E5</div>
+</div>
+
+<div class="legend">
+    <div><span class="box available"></span> Available</div>
+    <div><span class="box occupied"></span> Occupied</div>
+    <div><span class="box blocked"></span> Blocked</div>
+    <div><span class="box selected"></span> Selected</div>
+</div>
+
+<button class="confirm-btn" onclick="confirmBooking()">
+    <i class="fa-solid fa-check"></i> Confirm Booking
+</button>
+<script>
+
+/* ✅ Login check */
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) window.location.href = "login.html";
+
+/* ✅ Lot check */
+const lot = localStorage.getItem("parkingLot");
+if (!lot) {
+    alert("No parking lot selected ❌");
+    window.location.href = "dashboard.html";
+}
+document.getElementById("lotName").innerText = lot;
+
+
+/* ✅ Selected slot */
+let selectedSlot = null;
+
+function selectSlot(element) {
+
+    if (!element.classList.contains("available")) {
+        alert("Slot not available ❌");
+        return;
+    }
+
+    document.querySelectorAll(".slot").forEach(s => s.classList.remove("selected"));
+
+    element.classList.add("selected");
+    selectedSlot = element.innerText;
+}
+
+async function adjustSlots(){
+    try{
+        let res = await fetch("http://localhost:3000/parking");
+        let data = await res.json();
+
+        let selected = data.find(l => l.name === lot);
+
+        let totalSlots = selected.total;
+
+        let allSlots = document.querySelectorAll(".slot");
+
+        allSlots.forEach((slot, index) => {
+            if(index < totalSlots){
+                slot.style.display = "flex";
+            } else {
+                slot.style.display = "none";
+            }
+        });
+
+    }catch(err){
+        console.error(err);
+    }
+}
+
+/* 🔥 FUNCTION TO LOAD BOOKINGS */
+function loadBookedSlots(){
+    fetch("http://localhost:3000/bookings")
+    .then(res => res.json())
+    .then(data => {
+
+        data.forEach(b => {
+            if (b.lot_name === lot &&b.status !== "Expired"){
+
+                document.querySelectorAll(".slot").forEach(slot => {
+
+                    if (slot.innerText === b.slot_number) {
+                        slot.classList.remove("available");
+                        slot.classList.add("occupied");
+                        slot.onclick = null;
+                    }
+
+                });
+
+            }
+        });
+
+    });
+}
+
+adjustSlots();
+
+/* 🔥 INITIAL LOAD */
+loadBookedSlots();
+
+/* 🔥 AUTO REFRESH EVERY 3 SEC */
+setInterval(loadBookedSlots, 3000);
+
+
+/* ✅ Confirm booking */
+function confirmBooking() {
+if(document.querySelectorAll(".slot.available").length === 0){
+    alert("Parking Full 🚫");
+    return;
+}
+    if (!selectedSlot) {
+        alert("Please select a slot");
+        return;
+    }
+
+    const vehicleType = document.querySelector('input[name="vehicle"]:checked').value;
+    const startTime = document.getElementById("startTime").value;
+const endTime = document.getElementById("endTime").value;
+
+if(!startTime || !endTime){
+    alert("Please select start and end time");
+    return;
+}
+
+if(new Date(endTime) <= new Date(startTime)){
+    alert("End time must be after start time");
+    return;
+}
+
+    fetch("http://localhost:3000/bookings", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+    user_email: user.email,
+    lot_name: lot,
+    slot_number: selectedSlot,
+    vehicle_type: vehicleType,
+    date: new Date().toISOString().split('T')[0],
+    time: "1 hour",
+    start_time: startTime,
+    end_time: endTime
+})
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (!data || !data.success) {
+            alert("Booking failed ❌");
+            return;
+        }
+
+        /* 🔥 INSTANT UI UPDATE */
+        document.querySelectorAll(".slot").forEach(slot => {
+            if (slot.innerText === selectedSlot) {
+                slot.classList.remove("available");
+                slot.classList.add("occupied");
+                slot.onclick = null;
+            }
+        });
+
+        /* 🔥 SAVE TICKET (SAFE VERSION) */
+       localStorage.setItem("ticket", JSON.stringify({
+    id: data.booking.id,
+    user_email: user.email,
+    lot_name: lot,
+    slot_number: selectedSlot,
+    vehicle_type: vehicleType,
+    date: new Date().toISOString().split('T')[0],
+    time: "1 hour",
+    end_time: data.booking.end_time   // 🔥 ADD THIS LINE
+}));
+
+        /* GO TO PAYMENT */
+        window.location.href = "payment.html";
+
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Server error ❌");
+    });
+}
+
+
+/* Home */
+function goHome(){
+    window.location.href = "dashboard.html";
+}
+
+</script>
+</body>
+</html>

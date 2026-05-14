@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Bookings | ParkEase</title>
+
+<link rel="stylesheet" href="css/explore.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+.cancel-btn{
+    margin-top:10px;
+    padding:6px 12px;
+    border:none;
+    background:#e74c3c;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+.cancel-btn:hover{
+    background:#c0392b;
+}
+</style>
+
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <h2 class="brand">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </h2>
+
+    <ul>
+        <li onclick="goDashboard()"><i class="fa-solid fa-gauge"></i> Dashboard</li>
+        <li onclick="goExplore()"><i class="fa-solid fa-compass"></i> Explore Lots</li>
+        <li onclick="goBookings()"><i class="fa-solid fa-receipt"></i> My Bookings</li>
+        <li onclick="goProfile()"><i class="fa-solid fa-user"></i> Profile</li>
+        <li onclick="goAnalytics()"><i class="fa-solid fa-chart-line"></i> My Analytics</li>
+        <li class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+    </ul>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<div class="topbar">
+    <h2><i class="fa-solid fa-receipt"></i> My Bookings</h2>
+</div>
+
+<div class="lots"></div>
+
+</main>
+</div>
+
+<script>
+
+/* ✅ Check login */
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+    window.location.href = "login.html";
+}
+
+/* ✅ Fetch bookings */
+
+fetch(`http://localhost:3000/bookings/${user.email}`)
+.then(res => res.json())
+.then(data => {
+
+    const container = document.querySelector(".lots");
+    container.innerHTML = "";
+
+    data.sort((a, b) => b.id - a.id);
+
+    if (data.length === 0) {
+        container.innerHTML = "<p>No bookings found</p>";
+        return;
+    }
+
+    data.forEach(b => {
+
+        const card = document.createElement("div");
+        card.className = "lot-card";
+
+        card.innerHTML = `
+            <h3>${b.lot_name}</h3>
+            <p><strong>Booking ID:</strong> PK-${b.id}</p>
+            <p><strong>Slot:</strong> ${b.slot_number}</p>
+            <p><strong>Date:</strong> ${b.date ? new Date(b.date).toDateString() : "N/A"}</p>
+            <p><strong>Time:</strong> ${b.time}</p>
+            <p><strong>Start:</strong> ${new Date(b.start_time).toLocaleString()}</p>
+
+<p><strong>End:</strong> ${new Date(b.end_time).toLocaleString()}</p>
+
+<p>
+<strong>Status:</strong> 
+<span style="color:${b.status === 'Expired' ? 'red' : 'green'}">
+${b.status}
+</span>
+</p>
+            <button class="cancel-btn" onclick="cancelBooking(${b.id})">
+                Cancel Booking
+            </button>
+        `;
+
+        container.appendChild(card);
+    });
+
+})
+.catch(err => {
+    console.error(err);
+    alert("Error loading bookings");
+});
+
+
+/* ❌ Cancel booking */
+function cancelBooking(id){
+
+    if(!confirm("Are you sure to cancel this booking?")) return;
+
+    fetch(`http://localhost:3000/bookings/${id}`, {
+        method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.success){
+            alert("Booking Cancelled ✅");
+            location.reload();
+        } else {
+            alert("Cancel failed ❌");
+        }
+
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error cancelling booking");
+    });
+}
+
+
+/* Navigation */
+function goDashboard(){ window.location.href="dashboard.html"; }
+function goExplore(){ window.location.href="explore.html"; }
+function goBookings(){ window.location.href="mybookings.html"; }
+function goProfile(){ window.location.href="profile.html"; }
+function goAnalytics(){ window.location.href="analytics.html"; }
+
+function logout(){
+    localStorage.clear();
+    window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

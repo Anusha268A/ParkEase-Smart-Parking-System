@@ -1,0 +1,65 @@
+body{
+    background: #f4f7fb;
+    font-family: "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.ticket{
+    background: white;
+    width: 340px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.success{
+    color: #2ecc71;
+    margin-bottom: 15px;
+}
+
+.ticket-body{
+    text-align: left;
+    margin: 20px 0;
+    font-size: 15px;
+}
+
+.ticket-body p{
+    margin: 8px 0;
+}
+
+.barcode{
+    height: 60px;
+    background: repeating-linear-gradient(
+        90deg,
+        #000,
+        #000 2px,
+        transparent 2px,
+        transparent 4px
+    );
+    margin: 20px 0;
+}
+
+button{
+    padding: 10px 20px;
+    background: #004aad;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.header-left{
+    position: absolute;
+    left: 20px;
+    top: 18px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+.header-left:hover{
+    transform: scale(1.2);
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel | ParkEase</title>
+<link rel="stylesheet" href="css/admin.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+    <h2 class="brand">
+    <i class="fa-solid fa-square-parking"></i> ParkEase
+</h2>
+
+   <ul>
+    <li onclick="goBird()">
+        <i class="fa-solid fa-eye"></i> Bird's Eye
+    </li>
+
+    <li onclick="goParking()">
+        <i class="fa-solid fa-warehouse"></i> Parking Lots
+    </li>
+
+    <li onclick="goUsers()">
+        <i class="fa-solid fa-users"></i> Users
+    </li>
+
+    <li onclick="goReservations()">
+        <i class="fa-solid fa-calendar-check"></i> Reservations
+    </li>
+
+    <li class="logout" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </li>
+</ul>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<h2>Bird’s Eye View</h2>
+<!-- 🔥 STATS -->
+<div class="stats">
+    <div class="card">Total Slots<br><strong>15</strong></div>
+    <div class="card">Available<br><strong>8</strong></div>
+    <div class="card">Booked<br><strong>5</strong></div>
+    <div class="card">Blocked<br><strong>2</strong></div>
+</div>
+
+<!-- 🔥 LEGEND -->
+<div class="legend">
+    <span><span class="box available"></span> Available</span>
+    <span><span class="box booked"></span> Booked</span>
+    <span><span class="box blocked"></span> Blocked</span>
+</div>
+
+<div class="lots">
+
+    <!-- Parking Lot -->
+    <div class="lot">
+        <h3>Campus Parking</h3>
+        <div class="grid">
+            <span class="slot available" title="Available"></span>
+            <span class="slot booked" title="booked"></span>
+            <span class="slot available" title="Available"></span>
+            <span class="slot blocked" title="blocked"></span>
+            <span class="slot available" title="Available"></span>
+
+            <span class="slot booked" title="booked"></span>
+            <span class="slot available" title="Available"></span>
+            <span class="slot available" title="Available"></span>
+            <span class="slot blocked" title="blocked"></span>
+            <span class="slot available" title="Available"></span>
+        </div>
+    </div>
+    <div class="lot">
+    <h3>City Parking</h3>
+    <div class="grid">
+        <span class="slot available" title="Available"></span>
+        <span class="slot booked" title="booked"></span>
+        <span class="slot available" title="Available"></span>
+        <span class="slot blocked" title="blocked"></span>
+    </div>
+</div>
+
+<div class="lot">
+    <h3>Office Parking</h3>
+    <div class="grid">
+        <span class="slot booked" title="booked"></span>
+        <span class="slot available" title="Available"></span>
+        <span class="slot available" title="Available"></span>
+        <span class="slot blocked" title="blocked"></span>
+    </div>
+</div>
+    <!-- Parking Lot -->
+    <div class="lot">
+        <h3>Mall Parking</h3>
+        <div class="grid">
+            <span class="slot available" title="Available"></span>
+            <span class="slot available" title="Available"></span>
+            <span class="slot booked" title="booked"></span>
+            <span class="slot booked" title="booked"></span>
+            <span class="slot blocked" title="blocked"></span>
+        </div>
+    </div>
+</div>
+</main>
+</div>
+
+
+<script>
+function goBird(){
+    window.location.href = "admin.html";
+}
+
+function goUsers(){
+    window.location.href = "admin-users.html";
+}
+
+function goReservations(){
+    window.location.href = "admin-reservations.html";
+}
+
+function goParking(){
+    window.location.href = "admin-parking.html";
+}
+
+function logout(){
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+document.querySelectorAll(".slot").forEach(slot => {
+    slot.addEventListener("click", () => {
+        alert("Slot Status: " + slot.classList[1]);
+    });
+});
+</script>
+
+</body>
+</html>

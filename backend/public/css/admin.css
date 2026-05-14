@@ -1,0 +1,135 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body{
+    background: #f4f7fb;
+}
+
+/* Layout */
+.layout{
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar{
+    width: 220px;
+    background: #0b5ed7;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.brand{
+    margin-bottom: 20px;
+}
+
+.sidebar ul{
+    list-style: none;
+}
+
+.sidebar li{
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.sidebar li:hover,
+.sidebar .active{
+    background: rgba(255,255,255,0.2);
+}
+
+.logout{
+    margin-top: 30px;
+    background: #dc3545;
+}
+
+/* Main */
+.main{
+    flex: 1;
+    padding: 25px;
+}
+
+/* Lots */
+.lots{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap: 20px;
+}
+
+/* Lot Card */
+.lot{
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* Slot Grid */
+.grid{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    margin-top: 15px;
+}
+
+/* Slot */
+.slot{
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+}
+
+.available{ background: #2ecc71; }
+.booked{ background: #e74c3c; }
+.blocked{ background: #7f8c8d; }
+
+/* 🔥 Stats */
+.stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 🔥 Legend */
+.legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.legend span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.box {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+}
+
+/* 🔥 Hover effect */
+.slot:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+/* Section styling */
+.lot h3 {
+    margin-bottom: 10px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}

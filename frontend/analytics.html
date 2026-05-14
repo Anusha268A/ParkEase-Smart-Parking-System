@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Analytics | ParkEase</title>
+<link rel="stylesheet" href="css/dashboard-ui.css">
+<link rel="stylesheet" href="css/analytics.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+<body>
+
+<div class="layout">
+<!-- Sidebar -->
+    <aside class="sidebar">
+        <h2 class="brand">
+            <i class="fa-solid fa-square-parking"></i> ParkEase
+        </h2>
+
+        <ul>
+            <li onclick="goDashboard()"><i class="fa-solid fa-gauge"></i> Dashboard</li>
+            <li onclick="goExplore()"><i class="fa-solid fa-compass"></i> Explore Lots</li>
+            <li onclick="goBookings()"><i class="fa-solid fa-receipt"></i> My Bookings</li>
+            <li onclick="goProfile()"><i class="fa-solid fa-user"></i> Profile</li>
+            <li onclick="goAnalytics()"><i class="fa-solid fa-chart-line"></i> My Analytics</li>
+            <li class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+        </ul>
+    </aside>
+
+
+<main class="main">
+
+<div class="topbar">
+    <h2>My Analytics</h2>
+</div>
+
+<div class="stats">
+    <div class="card">Total Bookings<br><strong>0</strong></div>
+    <div class="card">Total Spent<br><strong>₹0</strong></div>
+    <div class="card">Completion Rate<br><strong>0%</strong></div>
+    <div class="card">My Vehicles<br><strong>0</strong></div>
+</div>
+
+<div class="charts">
+
+    <div class="card">
+        <h3>Slot Usage Overview</h3>
+        <canvas id="slotChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Weekly Parking Activity</h3>
+        <canvas id="weekChart"></canvas>
+    </div>
+
+</div>
+
+
+</main>
+</div>
+
+<script>
+       function goDashboard(){ window.location.href="dashboard.html"; }
+function goExplore(){ window.location.href="explore.html"; }
+function goBookings(){ window.location.href="mybookings.html"; }
+function goProfile(){ window.location.href="profile.html"; }
+function goAnalytics(){ window.location.href="analytics.html"; }
+
+function logout(){
+    localStorage.clear();
+    window.location.href="login.html";
+}
+
+
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(!user){
+    window.location.href = "login.html";
+}
+
+/* 🔥 FETCH BOOKINGS */
+fetch("http://localhost:3000/bookings")
+.then(res => res.json())
+.then(data => {
+
+    const userBookings = data.filter(b => b.user_email === user.email);
+    console.log("User bookings:", userBookings);
+
+    // ✅ TOTAL BOOKINGS
+    document.querySelectorAll(".card strong")[0].innerText = userBookings.length;
+
+    
+
+    // ✅ TOTAL SPENT
+    let total = 0;
+
+    userBookings.forEach(b => {
+        if(b.lot_name.includes("Mall")) total += 40;
+        else if(b.lot_name.includes("Office")) total += 25;
+        else total += 30;
+    });
+
+    
+document.querySelectorAll(".card strong")[1].innerText = "₹" + total;
+
+    // ✅ COMPLETION RATE
+    let rate = userBookings.length > 0 ? 100 : 0;
+document.querySelectorAll(".card strong")[2].innerText = rate + "%";
+
+    // ✅ VEHICLES (demo)
+document.querySelectorAll(".card strong")[3].innerText = 1;
+renderCharts(userBookings);
+})
+
+
+.catch(err => {
+    console.error(err);
+});
+
+
+/* ===== SLOT USAGE (PIE) ===== */
+/* ================= CHARTS ================= */
+
+/* SLOT USAGE */
+function renderCharts(userBookings) {
+
+    /* SLOT USAGE */
+    let lotCount = {};
+
+    userBookings.forEach(b => {
+        lotCount[b.lot_name] = (lotCount[b.lot_name] || 0) + 1;
+    });
+
+    new Chart(document.getElementById("slotChart"), {
+        type: "pie",
+        data: {
+            labels: Object.keys(lotCount),
+            datasets: [{
+                data: Object.values(lotCount),
+                backgroundColor: ["#4CAF50","#2196F3","#FF9800","#E91E63"]
+            }]
+        }
+    });
+
+
+    /* WEEKLY */
+    let days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    let counts = [0,0,0,0,0,0,0];
+
+    userBookings.forEach(b => {
+        let d = new Date(b.date).getDay();
+        counts[d]++;
+    });
+
+    new Chart(document.getElementById("weekChart"), {
+        type: "bar",
+        data: {
+            labels: days,
+            datasets: [{
+                data: counts,
+                backgroundColor: "#004aad"
+            }]
+        }
+    });
+}
+</script>
+</body>
+</html>

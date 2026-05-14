@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Parking Management | ParkEase</title>
+
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.btn {
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.add-btn {
+    background: #28a745;
+    color: white;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+</style>
+
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <h2 class="brand">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </h2>
+
+    <ul>
+        <li onclick="goBird()">
+            <i class="fa-solid fa-eye"></i> Bird's Eye
+        </li>
+
+        <li class="active">
+            <i class="fa-solid fa-warehouse"></i> Parking Lots
+        </li>
+
+        <li onclick="goUsers()">
+            <i class="fa-solid fa-users"></i> Users
+        </li>
+
+        <li onclick="goReservations()">
+            <i class="fa-solid fa-calendar-check"></i> Reservations
+        </li>
+
+        <li class="logout" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </li>
+    </ul>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<h2>Parking Management</h2>
+
+<button class="btn add-btn" onclick="addLot()">+ Add Parking Lot</button>
+
+<table class="table" id="parkingTable">
+    <thead>
+        <tr>
+            <th>Lot Name</th>
+            <th>Total Slots</th>
+            <th>Available</th>
+            <th>Booked</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</main>
+</div>
+
+<script>
+
+// 🔥 LOAD DATA FROM DATABASE
+async function loadParking(){
+    try {
+        let res = await fetch("http://localhost:3000/parking");
+        let data = await res.json();
+
+        let tbody = document.querySelector("#parkingTable tbody");
+        tbody.innerHTML = "";
+
+        data.forEach(lot => {
+            let row = `
+            <tr>
+                <td>${lot.name}</td>
+                <td>${lot.total}</td>
+                <td>${lot.available}</td>
+                <td>${lot.booked}</td>
+                <td>
+                    <button class="btn delete-btn" onclick="deleteLot(${lot.id})">Delete</button>
+                </td>
+            </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+
+    } catch(err){
+        console.error("Error loading parking:", err);
+    }
+}
+
+// 🔥 ADD PARKING
+async function addLot(){
+    let name = prompt("Enter Parking Lot Name:");
+    let total = prompt("Enter Total Slots:");
+
+    if(!name || !total) return;
+
+    await fetch("http://localhost:3000/parking", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            total: parseInt(total)
+        })
+    });
+
+    loadParking(); // refresh
+}
+
+// 🔥 DELETE PARKING
+async function deleteLot(id){
+    await fetch(`http://localhost:3000/parking/${id}`, {
+        method: "DELETE"
+    });
+
+    loadParking();
+}
+
+// 🔁 Navigation
+function goBird(){
+    window.location.href = "admin.html";
+}
+
+function goUsers(){
+    window.location.href = "admin-users.html";
+}
+
+function goReservations(){
+    window.location.href = "admin-reservations.html";
+}
+
+function logout(){
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+// 🔄 LOAD ON PAGE START
+loadParking();
+
+</script>
+
+</body>
+</html>

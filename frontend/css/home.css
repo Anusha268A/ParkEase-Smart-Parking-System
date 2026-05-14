@@ -1,0 +1,314 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: #f8fafc;
+    padding-top: 70px;
+}
+
+/* ================= NAVBAR ================= */
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #2563eb;
+}
+
+.logo-icon {
+    background: #2563eb;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+/* Navigation */
+nav a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 15px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #2563eb;
+}
+
+.login-btn {
+    border: 1px solid #2563eb;
+    padding: 6px 14px;
+    border-radius: 6px;
+    color: #2563eb;
+}
+
+.login-btn:hover {
+    background: #2563eb;
+    color: white;
+}
+
+/* ================= HERO ================= */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    background: url("../images/parking.jpeg") no-repeat center center/cover;
+    animation: zoomBg 12s infinite alternate;
+}
+
+/* Overlay */
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+}
+
+/* Text */
+.hero-text {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 700px;
+    text-align: center;
+
+    /* Better glass effect */
+    background: rgba(0, 0, 0, 0.4);
+    padding: 30px 40px;
+    border-radius: 15px;
+
+    /* smooth blur */
+    backdrop-filter: blur(10px);
+
+    /* soft shadow */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.hero-text h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+}
+
+.hero-text p {
+    color: rgba(255,255,255,0.95);
+    font-size: 18px;
+    text-shadow: 1px 1px 8px rgba(0,0,0,0.7);
+}
+
+/* Buttons */
+.hero-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.primary-btn {
+    background: #2563eb;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.primary-btn:hover {
+    background: #1e40af;
+    transform: scale(1.05);
+}
+
+.secondary-btn {
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    padding: 12px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.secondary-btn:hover {
+    background: #2563eb;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* ================= SECTIONS ================= */
+.section {
+    padding: 60px 80px;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.section-text {
+    color: #555;
+    max-width: 800px;
+    margin: auto;
+}
+
+.gray {
+    background: #f3f4f6;
+}
+
+/* Features */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.feature-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.feature-box:hover {
+    transform: translateY(-8px);
+}
+
+.feature-box h3 {
+    margin-bottom: 10px;
+    color: #2563eb;
+}
+
+/* Workflow */
+.workflow {
+    max-width: 600px;
+    margin: auto;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.workflow li {
+    margin: 10px 0;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+    width: 100%;
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes zoomBg {
+    from { background-size: 100%; }
+    to { background-size: 110%; }
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-text {
+        padding: 15px;
+    }
+}
+.primary-btn {
+    background: linear-gradient(45deg, #2563eb, #1e40af);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.6);
+}
+
+/* icon animation */
+.primary-btn i {
+    transition: 0.3s;
+}
+
+.primary-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* secondary */
+.secondary-btn {
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.secondary-btn:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    animation: fadeSlide 1s ease forwards;
+}
+
+.hero-text p {
+    animation: fadeSlide 1.5s ease forwards;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.hero-text h1 {
+    background: linear-gradient(45deg, #ffffff, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

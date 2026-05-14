@@ -1,0 +1,37 @@
+.users-table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.users-table th,
+.users-table td{
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.users-table th{
+    background: #f5f7fb;
+    font-weight: 600;
+}
+
+.role{
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.role.admin{
+    background: #0b5ed7;
+    color: white;
+}
+
+.role.user{
+    background: #d1e7ff;
+    color: #084298;
+}

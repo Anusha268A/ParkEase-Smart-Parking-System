@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Explore Parking Lots | ParkEase</title>
+
+<link rel="stylesheet" href="css/explore.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+/* Topbar */
+.topbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Hamburger */
+.hamburger{
+    display: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* Sidebar icons */
+.sidebar ul li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Search */
+.search-box{
+    position: relative;
+}
+
+#searchBox{
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+#suggestions{
+    position: absolute;
+    background: white;
+    width: 200px;
+    border: 1px solid #ddd;
+    z-index: 1000;
+}
+
+#suggestions div{
+    padding: 8px;
+    cursor: pointer;
+}
+
+#suggestions div:hover{
+    background: #f0f0f0;
+}
+
+/* Cards */
+.lot-card{
+    transition: 0.3s;
+}
+
+.lot-card:hover{
+    transform: translateY(-5px);
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    .hamburger{
+        display: block;
+    }
+
+    .sidebar{
+        position: fixed;
+        left: -220px;
+        top: 0;
+        height: 100%;
+        z-index: 999;
+        transition: 0.3s;
+    }
+
+    .sidebar.active{
+        left: 0;
+    }
+
+    .lots{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <h2 class="brand">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </h2>
+    <ul>
+        <li onclick="goDashboard()">
+            <i class="fa-solid fa-gauge"></i> Dashboard
+        </li>
+
+        <li onclick="goExplore()">
+            <i class="fa-solid fa-compass"></i> Explore Lots
+        </li>
+
+        <li onclick="goBookings()">
+            <i class="fa-solid fa-receipt"></i> My Bookings
+        </li>
+
+        <li onclick="goProfile()">
+            <i class="fa-solid fa-user"></i> Profile
+        </li>
+
+        <li onclick="goAnalytics()">
+            <i class="fa-solid fa-chart-line"></i> My Analytics
+        </li>
+
+        <li class="logout" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </li>
+    </ul>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<!-- Topbar -->
+<div class="topbar">
+
+    <i class="fa fa-bars hamburger" onclick="toggleSidebar()"></i>
+
+    <h2><i class="fa-solid fa-compass"></i> Explore Parking Lots</h2>
+
+    <div class="search-box">
+        <input type="text" id="searchBox" placeholder="Search parking lots..." onkeyup="searchLots()">
+        <div id="suggestions"></div>
+    </div>
+
+</div>
+
+<!-- Parking lots -->
+<div class="lots">
+
+    <div class="lot-card">
+        <h3><i class="fa-solid fa-building"></i> Campus Parking</h3>
+        <p>₹30 / hour</p>
+        <p>Available: 45 / 50</p>
+        <p>Time: 06:00 – 22:00</p>
+        <button onclick="selectLot('Campus Parking')">Book</button>
+    </div>
+
+    <div class="lot-card">
+        <h3><i class="fas fa-store"></i> Mall Parking</h3>
+        <p>₹40 / hour</p>
+        <p>Available: 30 / 40</p>
+        <p>Time: 24 Hours</p>
+        <button onclick="selectLot('Mall Parking')">Book</button>
+    </div>
+
+    <div class="lot-card">
+        <h3><i class="fas fa-briefcase"></i> Office Parking</h3>
+        <p>₹25 / hour</p>
+        <p>Available: 60 / 70</p>
+        <p>Time: 09:00 – 21:00</p>
+        <button onclick="selectLot('Office Parking')">Book</button>
+    </div>
+
+    <div class="lot-card">
+        <h3><i class="fas fa-city"></i> City Center Parking</h3>
+        <p>₹35 / hour</p>
+        <p>Available: 20 / 30</p>
+        <p>Time: 06:00 – 23:00</p>
+        <button onclick="selectLot('City Center Parking')">Book</button>
+    </div>
+
+</div>
+
+<!-- ✅ MAP SECTION (ADDED PERFECTLY) -->
+<div style="margin-top:30px;">
+    <h3 style="margin-bottom:10px;">📍 Parking Location</h3>
+
+    <iframe 
+    id="mapFrame"
+    src="https://www.google.com/maps?q=campus parking&output=embed"
+    width="100%" 
+    height="300"
+    style="border-radius:10px; border:0;">
+</iframe>
+</div>
+
+</main>
+</div>
+
+<script>
+
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) window.location.href = "login.html";
+
+function toggleSidebar(){
+    document.getElementById("sidebar").classList.toggle("active");
+}
+
+let lots = [];
+function searchLots(){
+    const input = document.getElementById("searchBox").value.toLowerCase();
+    const box = document.getElementById("suggestions");
+    const cards = document.querySelectorAll(".lot-card");
+
+    box.innerHTML = "";
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(input) ? "block" : "none";
+    });
+
+    if(input === "") return;
+
+    lots.forEach(lot => {
+        if(lot.toLowerCase().includes(input)){
+            box.innerHTML += `<div onclick="selectLot('${lot}')">${lot}</div>`;
+        }
+    });
+    document.getElementById("mapFrame").src =
+    "https://www.google.com/maps?q=" + input + "&output=embed";
+}
+
+function selectLot(lotName){
+    localStorage.setItem("parkingLot", lotName);
+
+    document.getElementById("mapFrame").src =
+        "https://www.google.com/maps?q=" + lotName + "&output=embed";
+
+    setTimeout(() => {
+        window.location.href = "slots.html";
+    }, 1000);
+}
+
+function goDashboard(){ window.location.href="dashboard.html"; }
+function goExplore(){ window.location.href="explore.html"; }
+function goBookings(){ window.location.href="mybookings.html"; }
+function goProfile(){ window.location.href="profile.html"; }
+function goAnalytics(){ window.location.href="analytics.html"; }
+
+
+async function loadParkingLots(){
+    try{
+        let res = await fetch("http://localhost:3000/parking");
+        let data = await res.json();
+
+        lots = data.map(l => l.name);
+
+        let container = document.querySelector(".lots");
+        container.innerHTML = "";
+
+        data.forEach(lot => {
+            let card = `
+                <div class="lot-card">
+                    <h3>${lot.name}</h3>
+                    <p>Available: ${lot.available} / ${lot.total}</p>
+                    <button onclick="selectLot('${lot.name}')">Book</button>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
+    }catch(err){
+        console.error("Error:", err);
+    }
+}
+function logout(){
+    localStorage.clear();
+    window.location.href="login.html";
+}
+
+loadParkingLots();
+
+</script>
+
+</body>
+</html>

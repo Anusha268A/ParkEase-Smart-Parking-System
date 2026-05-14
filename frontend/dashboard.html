@@ -1,0 +1,221 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard | ParkEase</title>
+
+<link rel="stylesheet" href="css/dashboard-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+/* ===== STATS ===== */
+.stat{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.stat i{
+    font-size:28px;
+    padding:12px;
+    border-radius:10px;
+    color:white;
+}
+
+.blue i{ background:#3498db; }
+.purple i{ background:#9b59b6; }
+.green i{ background:#2ecc71; }
+.red i{ background:#e74c3c; }
+
+/* ===== ACTIVITY ===== */
+.activity{
+    display:flex;
+    gap:20px;
+}
+
+.activity-card{
+    flex:1;
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.activity-card i{
+    font-size:20px;
+    color:#004aad;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <h2 class="brand">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </h2>
+
+    <ul>
+        <li onclick="goDashboard()"><i class="fa-solid fa-gauge"></i> Dashboard</li>
+        <li onclick="goExplore()"><i class="fa-solid fa-compass"></i> Explore Lots</li>
+        <li onclick="goBookings()"><i class="fa-solid fa-receipt"></i> My Bookings</li>
+        <li onclick="goProfile()"><i class="fa-solid fa-user"></i> Profile</li>
+        <li onclick="goAnalytics()"><i class="fa-solid fa-chart-line"></i> My Analytics</li>
+        <li class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+    </ul>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<!-- Topbar -->
+<div class="topbar">
+    <h2><i class="fa-solid fa-gauge"></i> Dashboard Home</h2>
+    <h3 id="welcomeUser"></h3>
+    <input type="text" placeholder="Search parking lots...">
+</div>
+
+<!-- <h3 class="section-title">Quick Actions</h3>
+
+<div class="lots">
+
+    <div class="lot-card">
+        <button onclick="goExplore()">🚗 Book Parking</button>
+    </div>
+
+    <div class="lot-card">
+        <button onclick="goBookings()">📄 View My Bookings</button>
+    </div>
+
+</div>
+        <h3 class="section-title">Explore Parking Lots</h3>
+
+        <div class="lots">
+
+            <div class="lot-card">
+                <h4>Campus Parking</h4>
+                <p>₹30 / hour</p>
+                <p>Slots: 45 / 50</p>
+                <button onclick="bookSlot('Campus Parking')">Book</button>
+            </div>
+
+            <div class="lot-card">
+                <h4>Mall Parking</h4>
+                <p>₹40 / hour</p>
+                <p>Slots: 30 / 40</p>
+                <button onclick="bookSlot('Mall Parking')">Book</button>
+            </div>
+
+            <div class="lot-card">
+                <h4>Office Parking</h4>
+                <p>₹25 / hour</p>
+                <p>Slots: 60 / 70</p>
+                <button onclick="bookSlot('Office Parking')">Book</button>
+            </div>
+
+        </div> -->
+
+<!-- ===== STATS ===== -->
+<div class="stats">
+
+    <div class="card stat blue">
+        <i class="fa-solid fa-warehouse"></i>
+        <div>
+            <p>Total Lots</p>
+            <h2>4</h2>
+        </div>
+    </div>
+
+    <div class="card stat purple">
+        <i class="fa-solid fa-square-parking"></i>
+        <div>
+            <p>Total Slots</p>
+            <h2>250</h2>
+        </div>
+    </div>
+
+    <div class="card stat green">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+            <p>Available</p>
+            <h2>190</h2>
+        </div>
+    </div>
+
+    <div class="card stat red">
+        <i class="fa-solid fa-car"></i>
+        <div>
+            <p>Booked</p>
+            <h2>60</h2>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== RECENT ACTIVITY ===== -->
+<h3 class="section-title">Recent Activity</h3>
+
+<div class="activity">
+
+    <div class="activity-card">
+        <i class="fa-solid fa-clock"></i>
+        <div>
+            <h4>Campus Parking</h4>
+            <p>Booked Today</p>
+        </div>
+    </div>
+
+    <div class="activity-card">
+        <i class="fa-solid fa-clock"></i>
+        <div>
+            <h4>Mall Parking</h4>
+            <p>Booked Yesterday</p>
+        </div>
+    </div>
+
+</div>
+
+</main>
+</div>
+
+<script>
+
+/* ✅ Login Check */
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+    document.getElementById("welcomeUser").innerText = "👋 Welcome, " + user.name;
+} else {
+    window.location.href = "login.html";
+}
+
+/* Navigation */
+function goDashboard(){ window.location.href="dashboard.html"; }
+function goExplore(){ window.location.href="explore.html"; }
+function goBookings(){ window.location.href="mybookings.html"; }
+function goProfile(){ window.location.href="profile.html"; }
+function goAnalytics(){ window.location.href="analytics.html"; }
+
+/* Logout */
+function logout(){
+    localStorage.removeItem("user");
+    window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

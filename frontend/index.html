@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ParkEase | Smart Parking System</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<header class="header">
+    <div class="container">
+        <div class="logo">
+    <span class="logo-icon">P</span>
+    <span class="logo-text">ParkEase</span>
+</div>
+        <nav>
+            <a href="#overview">Overview</a>
+            <a href="#features">Features</a>
+            <a href="#workflow">Workflow</a>
+            <a href="login.html" class="login-btn">Login</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+
+        <!-- LEFT -->
+        <div class="hero-text">
+            <!-- <h1>Reimagining Urban Parking</h1>
+
+<p>
+    ParkEase transforms the way we experience parking by blending smart technology 
+    with simplicity. Discover available slots in real-time, reserve instantly, and 
+    eliminate the chaos of searching for parking — all from one intelligent platform.
+</p> -->
+<h1>Smart Parking System</h1>
+
+<p>
+    Say goodbye to endless searching and traffic frustration. ParkEase brings a seamless, 
+    data-driven parking experience that helps users locate, book, and manage parking 
+    spaces effortlessly in real time.
+</p>
+
+            <div class="hero-buttons">
+    <a href="login.html" class="primary-btn">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> Get Started
+    </a>
+
+    <a href="#features" class="secondary-btn">
+        Explore Features
+    </a>
+</div>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <!-- <div class="hero-image">
+            <img src="/images/parking.webp" alt="Smart Parking System">
+        </div> -->
+
+    </div>
+</section>
+
+<!-- Overview -->
+<section class="section" id="overview">
+    <h2>System Overview</h2>
+    <p class="section-text">
+        ParkEase is a web-based smart parking system designed to streamline parking 
+        operations by providing real-time slot availability, structured booking, 
+        and centralized management without the need for physical sensors.
+    </p>
+</section>
+
+<!-- Features -->
+<section class="section gray" id="features">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+        <div class="feature-box">
+            <h3><i class="fa-solid fa-map-location-dot"></i> User Slot Booking</h3>
+            <p>Allows users to view and reserve parking slots using a visual layout.</p>
+        </div>
+        <div class="feature-box">
+            <h3><i class="fa-solid fa-circle-info"></i> Color-Coded Slot Status</h3>
+            <p>Clearly indicates available, occupied, and blocked slots.</p>
+        </div>
+        <div class="feature-box">
+            <h3><i class="fa-solid fa-id-card"></i> Booking Identification</h3>
+            <p>Generates a unique booking ID for verification at entry.</p>
+        </div>
+        <div class="feature-box">
+            <h3><i class="fa-solid fa-user-shield"></i> Admin Control Panel</h3>
+            <p>Provides administrative control over slots and reservations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Workflow -->
+<section class="section" id="workflow">
+    <h2>System Workflow</h2>
+    <ol class="workflow">
+        <li>User authentication through login</li>
+        <li>Selection of parking location and vehicle type</li>
+        <li>Slot selection via interactive layout</li>
+        <li>Booking confirmation and ID generation</li>
+    </ol>
+</section>
+<section class="section fade-in" id="overview">
+<section class="section gray fade-in" id="features">
+<section class="section fade-in" id="workflow">
+<script id="b3b0n1">
+window.addEventListener("scroll", function(){
+    let header = document.querySelector(".header");
+    header.classList.toggle("scrolled", window.scrollY > 50);
+});
+</script>
+<script id="z1k4wq">
+const elements = document.querySelectorAll(".fade-in");
+
+window.addEventListener("scroll", () => {
+    elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight - 100){
+            el.classList.add("show");
+        }
+    });
+});
+</script>
+<!-- Footer -->
+<footer class="footer">
+    <p>©️ 2026 ParkEase | Mini Project</p>
+</footer>
+
+</body>
+</html>

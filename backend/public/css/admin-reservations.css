@@ -1,0 +1,37 @@
+.reservation-table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.reservation-table th,
+.reservation-table td{
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.reservation-table th{
+    background: #f5f7fb;
+    font-weight: 600;
+}
+
+.status{
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.active{
+    background: #d1e7ff;
+    color: #084298;
+}
+
+.status.completed{
+    background: #d4edda;
+    color: #155724;
+}

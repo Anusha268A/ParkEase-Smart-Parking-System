@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | ParkEase</title>
+
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+    .password-eye {
+        position: absolute;
+        right: 10px;
+        top: 12px;
+        font-size: 14px;
+        color: #aaa;
+        cursor: pointer;
+    }
+
+    .password-eye:hover {
+        color: #333;
+    }
+    </style>
+</head>
+
+<body>
+
+<header class="app-header">
+    <div class="logo">
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </div>
+</header>
+
+<div class="page-center">
+
+<div class="auth-box">
+    <h1>
+        <i class="fa-solid fa-square-parking"></i> ParkEase
+    </h1>
+
+    <p class="tagline">Smart Parking Management</p>
+
+    <form onsubmit="loginUser(event)">
+        <input type="text" id="username" placeholder="👤 Your Name" required>
+        <input type="email" id="email" placeholder="📧 Email Address" required>
+
+        <!-- ✅ Password with Eye -->
+        <div style="position:relative;">
+            <input type="password" id="password" placeholder="🔒 Password" required style="width:100%; padding-right:35px;">
+            <i class="fa-solid fa-eye-slash password-eye" onclick="togglePassword('password', this)"></i>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="social-icons">
+        <i class="fa-brands fa-google"></i>
+        <i class="fa-brands fa-facebook-f"></i>
+        <i class="fa-brands fa-apple"></i>
+    </div>
+
+    <p class="link-text">
+        New user? <a href="register.html">Create an account</a>
+    </p>
+</div>
+
+</div>
+
+<script>
+function loginUser(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  fetch("http://localhost:3000/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    if (!data.success) {
+      alert(data.message || "Invalid credentials");
+      return;
+    }
+
+    alert("Login Successful ✅");
+
+    localStorage.setItem("user", JSON.stringify(data.user));
+    window.location.href = "dashboard.html";
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Login Failed ❌");
+  });
+}
+
+/* 👁️ Toggle Password */
+function togglePassword(id, icon){
+    const input = document.getElementById(id);
+
+    if(input.type === "password"){
+        // 👉 SHOW password
+        input.type = "text";
+
+        // 👉 change to eye
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+    } else {
+        // 👉 HIDE password
+        input.type = "password";
+
+        // 👉 change to eye-slash
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    }
+}
+</script>
+
+</body>
+</html>

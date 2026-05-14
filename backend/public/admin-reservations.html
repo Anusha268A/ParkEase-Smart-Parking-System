@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reservations | ParkEase</title>
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/admin-reservations.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <h2 class="brand">ParkEase</h2>
+ <ul>
+    <li onclick="goBird()">
+        <i class="fa-solid fa-eye"></i> Bird's Eye
+    </li>
+
+    <li onclick="goParking()">
+        <i class="fa-solid fa-warehouse"></i> Parking Lots
+    </li>
+
+    <li onclick="goUsers()">
+        <i class="fa-solid fa-users"></i> Users
+    </li>
+
+    <li onclick="goReservations()">
+        <i class="fa-solid fa-calendar-check"></i> Reservations
+    </li>
+
+    <li class="logout" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </li>
+</ul>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<h2>
+    <i class="fa-solid fa-calendar-check"></i> Parking Reservations
+</h2>
+
+
+<div class="stats">
+    <div class="card">Total Reservations<br><strong id="totalRes">0</strong></div>
+    <div class="card">Active<br><strong id="activeRes">0</strong></div>
+    <div class="card">Completed<br><strong id="completedRes">0</strong></div>
+</div>
+<table class="reservation-table">
+<thead>
+<tr>
+    <th>Booking ID</th>
+    <th>User</th>
+    <th>Parking Lot</th>
+    <th>Slot</th>
+    <th>Date</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody id="bookingList"></tbody>
+</table>
+
+</main>
+</div>
+<script>
+
+/* 🔒 Admin check */
+const currentUser = JSON.parse(localStorage.getItem("user"));
+
+if (!currentUser || currentUser.email !== "admin@gmail.com") {
+    alert("Access denied ❌");
+    window.location.href = "login.html";
+}
+
+/* ✅ Fetch bookings */
+fetch("http://localhost:3000/bookings")
+.then(res => res.json())
+.then(bookings => {
+
+    const container = document.getElementById("bookingList");
+
+    let active = 0;
+    let completed = 0;
+
+ bookings.forEach(b => {
+
+    const bookingDate = new Date(b.date);
+    const today = new Date();
+
+    today.setHours(0,0,0,0);
+    bookingDate.setHours(0,0,0,0);
+
+    let status = "";
+    if (bookingDate >= today) {
+        status = '<span class="status active">ACTIVE</span>';
+        active++;
+    } else {
+        status = '<span class="status completed">COMPLETED</span>';
+        completed++;
+    }
+
+    const row = `
+        <td>PK-${b.id}</td>
+        <td>${b.user_email}</td>
+        <td>${b.lot_name}</td>
+        <td>${b.slot_number}</td>
+        <td>${new Date(b.date).toDateString()}</td>
+        <td>${status}</td>
+        <td>
+            <button onclick="deleteBooking(${b.id})"
+            style="background:red;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">
+                Delete
+            </button>
+        </td>
+    `;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = row;
+    container.appendChild(tr);
+});
+
+    /* ✅ Update stats */
+    document.getElementById("totalRes").innerText = bookings.length;
+    document.getElementById("activeRes").innerText = active;
+    document.getElementById("completedRes").innerText = completed;
+
+})
+.catch(err => {
+    console.error(err);
+    alert("Error loading bookings");
+});
+
+
+/* ❌ Delete booking */
+function deleteBooking(id){
+
+    if(!confirm("Delete this booking?")) return;
+
+    fetch(`http://localhost:3000/bookings/${id}`, {
+        method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.success){
+            alert("Deleted ✅");
+            location.reload();
+        } else {
+            alert("Delete failed ❌");
+        }
+
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error deleting booking");
+    });
+}
+
+
+/* Navigation */
+
+function goBird(){
+    window.location.href = "admin.html";
+}
+
+function goUsers(){
+    window.location.href = "admin-users.html";
+}
+
+function goReservations(){
+    window.location.href = "admin-reservations.html";
+}
+
+function goParking(){
+    window.location.href = "admin-parking.html";
+}
+
+function logout(){
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
