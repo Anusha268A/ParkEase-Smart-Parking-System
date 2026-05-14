@@ -1,66 +1,109 @@
-# Smart-Parking-System
+# TEST CHANGE
+# ParkEase - Smart Parking System
 
-The "SPS" is a web app which allows users to book Parking Spot acorss the university campus of Cal State Fullerton. It is aimed at students, faculties and visitors of CSUF campus. The app let user enter the destination on campus and then it locates top 3 parking spots near the destination with the number of available spots at each level. User can select particular spot at the parking lot and can proceed to make secure payment. This helps user effectively navigate the availability across the campus and aids in decision making even before arriving at the campus. The web app uses React front-end and nodeJS and ExpressJS backend with MySQL database. Google Maps API and Stripe API has been used for essential functionalities within the app.
+ParkEase is a full-stack smart parking management system that allows users to search, book, and manage parking slots efficiently.
 
+The system helps users check parking availability, reserve slots, and manage bookings through an interactive web application.
 
-## Features
+---
 
-- Secure JWT Authentication
-- Responsive layout, compatible with both mobile and desktop
-- Entering the location to view top 3 parking lots
-- Displaying spot functionality across levels for every parking lot
-- Secure Payments
-- Stripe webhook feature to automatically update transaction IDs with payment intent IDs
-- View previous transactions in the dashboard
+# Features
 
+- User Registration and Login
+- JWT Authentication
+- Parking Slot Availability
+- Slot Booking System
+- Google Maps Integration
+- Stripe / UPI Payment Module
+- Booking Management
+- Responsive UI
+- Admin Dashboard
 
-## Architecture
-![Architecture](https://github.com/soham7kulkarni/Smart-Parking-System/assets/63456618/422c6d6f-6191-41f1-88a5-9d66192fcb06)
+---
 
-## Installation
+# System Architecture
 
-To install frontend dependencies
+![Architecture](assets/architecture.png)
 
-```bash
-  cd frontend
-  npm install
-```
+---
 
-To install backend dependencies
+# Screenshots
 
-```bash
-  cd backend
-  npm install
-```
+## Home Page
+![Home Page](assets/homepage.png)
 
-To run frontend
+## Login Page
+![Login](assets/login.png)
 
-```bash
-  cd frontend
-  npm start
-```
+## Dashboard
+![Dashboard](assets/dashboard.png)
 
-To run backend
+## Booking Page
+![Booking](assets/booking.png)
 
-```bash
-  cd backend
-  npm start
-```
+---
 
-To view the results
-```bash
-http://localhost:3000
-```
+# Tech Stack
 
+## Frontend
+- React.js
+- Chakra UI
+- Bootstrap
+- Material UI
+- TypeScript
 
+## Backend
+- Node.js
+- Express.js
 
-    
-## Tech Stack
+## Database
+- MySQL
 
-**Client:** React, Chakra UI, CSS
+## Authentication
+- JWT
+- bcryptjs
 
-**Server:** Node, Express
+## APIs & Integrations
+- Google Maps API
+- Stripe API
 
-**DatabaseL:** MySQL
+---
 
-**API:** Google Maps Javascript API, Google Maps Geocoding API, Google Maps Places API, Stripe API
+# Installation
+
+## Clone Repository
+
+git clone https://github.com/Anusha268A/ParkEase-Smart-Parking-System.git
+
+## Install Frontend Dependencies
+
+cd frontend
+npm install
+
+## Start Frontend
+
+npm start
+
+## Install Backend Dependencies
+
+cd backend
+npm install
+
+## Start Backend
+
+npm start
+
+---
+
+# Future Enhancements
+
+- Real-time slot tracking
+- QR-based parking access
+- AI-based parking prediction
+- Email notifications
+
+---
+
+# Author
+
+Anusha
